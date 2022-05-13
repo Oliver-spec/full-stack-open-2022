@@ -1,6 +1,6 @@
 # Full Stack Open 2022
 
-## [Link to the course] (https://fullstackopen.com/en/)
+## [Link to the course](https://fullstackopen.com/en/)
 
 ## Progress Tracker
 
