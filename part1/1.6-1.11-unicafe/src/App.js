@@ -1,18 +1,37 @@
 import { useState } from 'react'
 
-const ShowRating = ({good, neutral, bad}) => (
-  <>
-    <p>
-      good {good}
-    </p>
-    <p>
-      neutral {neutral}
-    </p>
-    <p>
-      bad {bad}
-    </p>
-  </>
-)
+const Statistics = ({good, neutral, bad, all, avg, positive}) => {
+  if (good === 0 && neutral === 0 && bad === 0) {
+    return (
+      <p>
+        No feedback given
+      </p>
+    )
+  } else {
+    return (
+      <>
+        <p>
+          good {good}
+        </p>
+        <p>
+          neutral {neutral}
+        </p>
+        <p>
+          bad {bad}
+        </p>
+        <p>
+          all {all}
+        </p>
+        <p>
+          average {avg}
+        </p>
+        <p>
+          positive {positive}%
+        </p>
+      </>
+    )
+  }
+}
 
 const App = () => {
 
@@ -43,14 +62,16 @@ const App = () => {
       <h1>
         statistics
       </h1>
-      <ShowRating
+      <Statistics
         good={good}
         neutral={neutral}
         bad={bad}
+        all={good + neutral + bad}
+        avg={(good - bad) / (good + neutral + bad)}
+        positive={good / (good + neutral + bad) * 100}
       />
     </>
   )
-    
 }
 
 export default App
