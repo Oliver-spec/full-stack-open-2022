@@ -5,7 +5,7 @@
 | Exercise | Completion |
 | :--------: | :----------: |
 | Part 0 |   DONE   |
-| Part 1 |          |
+| Part 1 |   DONE   |
 | Part 2 |          |
 | Part 3 |          |
 | Part 4 |          |
