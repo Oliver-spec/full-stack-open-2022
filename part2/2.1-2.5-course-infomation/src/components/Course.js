@@ -8,19 +8,22 @@ const Sum = ({parts}) => {
   )
 }
 
-const Part = ({part}) => {
+const Part = ({parts}) => {
   return (
-    <p>
-      {part.name} {part.exercises}
-    </p>
+    parts.map(
+      part =>
+      <p key={part.id}>
+        {part.name} {part.exercises}
+      </p>
+    )
   )
 }
 
 const Content = ({parts}) => {
   return (
     <>
-      {parts.map(part => <Part key={part.id} part={part} />)}
-      <Sum parts={parts}/>
+      <Part parts={parts} />
+      <Sum parts={parts} />
     </>
   )
 }
@@ -33,12 +36,15 @@ const Header = ({course}) => {
   )
 }
 
-const Course = ({course}) => {
+const Course = ({courses}) => {
   return (
-    <div>
-      <Header course={course} />
-      <Content parts={course.parts} />
-    </div>
+    courses.map(
+      course =>
+      <div key={course.id}>
+        <Header course={course} />
+        <Content parts={course.parts} />
+      </div>
+    )
   )
 }
 
