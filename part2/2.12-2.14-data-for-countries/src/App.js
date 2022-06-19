@@ -4,6 +4,7 @@ import Search from "./components/Search";
 import Names from "./components/Names";
 import TooMany from "./components/TooMany";
 import Detail from "./components/Detail";
+import Weather from "./components/Weather";
 
 export default function App() {
   // states
@@ -39,6 +40,7 @@ export default function App() {
       <div>
         <Search filterCountries={filterCountries} />
         <Detail country={displayedCountries[0]} />
+        <Weather country={displayedCountries[0]} />
       </div>
     );
   } else {

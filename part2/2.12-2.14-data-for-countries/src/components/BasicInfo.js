@@ -1,5 +1,5 @@
 export default function BasicInfo({ country }) {
-  if (country.name.common === "Macau") {
+  if (country.capital === undefined) {
     return (
       <div>
         <h1>{country.name.common}</h1>
