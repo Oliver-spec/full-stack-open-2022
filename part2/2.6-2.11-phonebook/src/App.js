@@ -11,8 +11,8 @@ export default function App() {
   const [newNumber, setNewNumber] = useState("");
 
   // effects
-  useEffect(function () {
-    axios.get("http://localhost:3001/persons").then(function (response) {
+  useEffect(() => {
+    axios.get("http://localhost:3001/persons").then((response) => {
       setPersons(response.data);
     });
   }, []);
@@ -41,19 +41,15 @@ export default function App() {
     setNewNumber(event.target.value);
   }
   function filterNames(event) {
-    const filteredNames = persons.filter(function (person) {
-      return person.name
-        .toLowerCase()
-        .startsWith(event.target.value.toLowerCase());
-    });
+    const filteredNames = persons.filter((person) =>
+      person.name.toLowerCase().startsWith(event.target.value.toLowerCase())
+    );
     console.log(filteredNames);
     setPersons(filteredNames);
   }
 
   // variables
-  const nameList = persons.map(function (person) {
-    return person.name;
-  });
+  const nameList = persons.map((person) => person.name);
 
   return (
     <div>
