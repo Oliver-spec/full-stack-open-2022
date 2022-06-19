@@ -45,7 +45,10 @@ export default function App() {
     return (
       <div>
         <Search filterCountries={filterCountries} />
-        <Names displayedCountries={displayedCountries} />
+        <Names
+          displayedCountries={displayedCountries}
+          setDisplayedCountries={setDisplayedCountries}
+        />
       </div>
     );
   }
