@@ -16,7 +16,6 @@ export default function Weather({ country }) {
 
   // states
   const [weather, setWeather] = useState({});
-  console.log("weather is", weather);
 
   // effects
   useEffect(() => {
