@@ -2,16 +2,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function Weather({ country }) {
-  // variables
-  const lat =
-    country.capital === undefined
-      ? country.latlng[0]
-      : country.capitalInfo.latlng[0];
-  const lon =
-    country.capital === undefined
-      ? country.latlng[1]
-      : country.capitalInfo.latlng[1];
+  if (country.capital === undefined) {
+    country.capital = country.name.common;
+  }
 
+  // variables
   const api_key = process.env.REACT_APP_API_KEY;
 
   // states
@@ -21,24 +16,31 @@ export default function Weather({ country }) {
   useEffect(() => {
     axios
       .get(
-        `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily,alerts&units=metric&appid=${api_key}`
+        `https://api.openweathermap.org/data/2.5/weather?q=${country.capital}&units=metric&APPID=${api_key}`
       )
       .then((response) => setWeather(response.data));
-  });
+  }, [country.capital, api_key]);
+
+  console.log(weather);
 
   if (Object.keys(weather).length === 0) {
     return (
       <div>
-        <h1>Weather in {country.name.common}</h1>
-        <p>Can't find weather in {country.name.common}</p>
+        <h1>Weather in {country.capital}</h1>
+        <p>Can't find weather in {country.capital}</p>
       </div>
     );
   } else {
     return (
       <div>
-        <h1>Weather in {country.name.common}</h1>
-        <p>temperature {weather.current.temp} Celcius</p>
-        <p>wind {weather.current.wind_speed} m/s</p>
+        <h1>Weather in {country.capital}</h1>
+        <p>temperature {weather.main.temp}°C</p>
+        <img
+          src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+          alt={weather.weather[0].description}
+        />
+        <p>{weather.weather[0].description}</p>
+        <p>wind {weather.wind.speed} m/s</p>
       </div>
     );
   }

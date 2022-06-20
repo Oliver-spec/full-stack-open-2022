@@ -3,7 +3,7 @@ export default function BasicInfo({ country }) {
     return (
       <div>
         <h1>{country.name.common}</h1>
-        <p>capital N/A</p>
+        <p>capital {country.name.common}</p>
         <p>area {country.area}</p>
       </div>
     );
