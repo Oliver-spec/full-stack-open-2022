@@ -5,6 +5,7 @@ import Filter from "./components/Filter";
 import AddName from "./components/AddName";
 import AddNumber from "./components/AddNumber";
 import SubmitButton from "./components/SubmitButton";
+import Notification from "./components/Notification";
 
 export default function App() {
   // states
@@ -12,6 +13,7 @@ export default function App() {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
+  const [notificationState, setNotificationState] = useState(null);
 
   // effects
   useEffect(() => {
@@ -28,25 +30,44 @@ export default function App() {
   }
 
   function addName(data) {
-    const repeatedName = data.find((person) => person.name === newName);
+    const repeatedPerson = data.find((person) => person.name === newName);
 
     if (
-      repeatedName !== undefined &&
+      repeatedPerson !== undefined &&
       window.confirm(
-        `${repeatedName.name} is already added to the phonebook, replace the old number with a new one?`
+        `${repeatedPerson.name} is already added to the phonebook, replace the old number with a new one?`
       )
     ) {
-      const updatedNumber = { ...repeatedName, number: newNumber };
+      const updatedNumber = { ...repeatedPerson, number: newNumber };
+
       talkToServer
-        .putData(repeatedName.id, updatedNumber)
+        .putData(repeatedPerson.id, updatedNumber)
         .then((response) =>
           setData(
             data.map((person) => (person.name === newName ? response : person))
           )
-        );
+        )
+        .then((response) => {
+          setNotificationState(
+            `changed number of ${repeatedPerson.name} from ${repeatedPerson.number} to ${newNumber}`
+          );
+          setTimeout(() => {
+            setNotificationState(null);
+          }, 5000);
+        })
+        .catch((error) => {
+          setNotificationState(
+            `information of ${repeatedPerson.name} has already been removed from the server`
+          );
+          setTimeout(() => {
+            setNotificationState(null);
+          }, 5000);
+          talkToServer.getData().then((response) => setData(response));
+        });
+
       setNewName("");
       setNewNumber("");
-      return;
+      return null;
     }
 
     const newPerson =
@@ -62,6 +83,10 @@ export default function App() {
       setData(data.concat(response));
     });
 
+    setNotificationState(`added ${newName}`);
+    setTimeout(() => {
+      setNotificationState(null);
+    }, 5000);
     setNewName("");
     setNewNumber("");
   }
@@ -88,6 +113,11 @@ export default function App() {
   return (
     <>
       <h2>Phonebook</h2>
+      <Notification
+        notificationState={notificationState}
+        newName={newName}
+        newNumber={newNumber}
+      />
       <Filter filterNames={filterNames} />
       <h2>add a new</h2>
       <form>
