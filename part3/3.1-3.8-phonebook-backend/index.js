@@ -1,6 +1,10 @@
-const { response, request } = require("express");
 const express = require("express");
+const morgan = require("morgan");
+
 const app = express();
+
+app.use(express.json());
+app.use(morgan("tiny"));
 
 let persons = [
   {
@@ -26,8 +30,6 @@ let persons = [
 ];
 
 const generateId = () => Math.floor(Math.random() * 10000);
-
-app.use(express.json());
 
 app.get("/api/persons", (request, response) => {
   response.json(persons);
