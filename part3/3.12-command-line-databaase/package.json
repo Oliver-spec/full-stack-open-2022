@@ -1,0 +1,14 @@
+{
+  "name": "3.12-command-line-databaase",
+  "version": "1.0.0",
+  "description": "MongoDB database for the phonebook application",
+  "main": "mongo.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "oliver",
+  "license": "MIT",
+  "dependencies": {
+    "mongoose": "^6.5.0"
+  }
+}
