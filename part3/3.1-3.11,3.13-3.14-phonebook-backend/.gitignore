@@ -1,0 +1,5 @@
+# dependencies
+node_modules
+
+# DO NOT PUSH
+.env

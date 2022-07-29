@@ -30,63 +30,26 @@ export default function App() {
   }
 
   function addName(data) {
-    const repeatedPerson = data.find((person) => person.name === newName);
+    if (!newName || !newNumber) {
+      setNotificationState("Please enter a valid name or number!");
+      setTimeout(() => {
+        setNotificationState(null);
+      }, 5000);
 
-    if (
-      repeatedPerson !== undefined &&
-      window.confirm(
-        `${repeatedPerson.name} is already added to the phonebook, replace the old number with a new one?`
-      )
-    ) {
-      const updatedNumber = { ...repeatedPerson, number: newNumber };
-
-      talkToServer
-        .putData(repeatedPerson.id, updatedNumber)
-        .then((response) =>
-          setData(
-            data.map((person) => (person.name === newName ? response : person))
-          )
-        )
-        .then((response) => {
-          setNotificationState(
-            `changed number of ${repeatedPerson.name} from ${repeatedPerson.number} to ${newNumber}`
-          );
-          setTimeout(() => {
-            setNotificationState(null);
-          }, 5000);
-        })
-        .catch((error) => {
-          setNotificationState(
-            `information of ${repeatedPerson.name} has already been removed from the server`
-          );
-          setTimeout(() => {
-            setNotificationState(null);
-          }, 5000);
-          talkToServer.getData().then((response) => setData(response));
-        });
-
-      setNewName("");
-      setNewNumber("");
-      return null;
+      return;
     }
 
-    const newPerson =
-      data.length === 0
-        ? {
-            name: newName,
-            number: newNumber,
-            id: 0,
-          }
-        : { name: newName, number: newNumber, id: data.at(-1).id + 1 };
-
-    talkToServer.postData(newPerson).then((response) => {
-      setData(data.concat(response));
-    });
+    talkToServer
+      .postData({ name: newName, number: newNumber })
+      .then((response) => {
+        setData(data.concat(response));
+      });
 
     setNotificationState(`added ${newName}`);
     setTimeout(() => {
       setNotificationState(null);
     }, 5000);
+
     setNewName("");
     setNewNumber("");
   }
@@ -127,7 +90,7 @@ export default function App() {
       <SubmitButton data={data} addName={addName} />
       <h2>Numbers</h2>
       {persons.map((person) => (
-        <Name key={person.id} person={person} deleteEntry={deleteEntry} />
+        <Name key={person._id} person={person} deleteEntry={deleteEntry} />
       ))}
     </>
   );
