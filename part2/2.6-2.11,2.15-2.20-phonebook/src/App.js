@@ -37,21 +37,32 @@ export default function App() {
       }, 5000);
 
       return;
+    } else if (data.find((person) => person.name === newName)) {
+      const repeatedPerson = data.find((person) => person.name === newName);
+      const id = repeatedPerson._id;
+      const newPerson = {
+        name: newName,
+        number: newNumber,
+      };
+
+      talkToServer
+        .putData(id, newPerson)
+        .then((res) => talkToServer.getData().then((res) => setData(res)));
+    } else {
+      talkToServer
+        .postData({ name: newName, number: newNumber })
+        .then((response) => {
+          setData(data.concat(response));
+        });
+
+      setNotificationState(`added ${newName}`);
+      setTimeout(() => {
+        setNotificationState(null);
+      }, 5000);
+
+      setNewName("");
+      setNewNumber("");
     }
-
-    talkToServer
-      .postData({ name: newName, number: newNumber })
-      .then((response) => {
-        setData(data.concat(response));
-      });
-
-    setNotificationState(`added ${newName}`);
-    setTimeout(() => {
-      setNotificationState(null);
-    }, 5000);
-
-    setNewName("");
-    setNewNumber("");
   }
 
   function changeNewNumber(event) {
@@ -67,8 +78,10 @@ export default function App() {
 
   function deleteEntry(person) {
     if (window.confirm(`Delete ${person.name}?`)) {
-      talkToServer.deleteData(person.id).then((response) => {
-        setData(data.filter((currentPerson) => currentPerson.id !== person.id));
+      talkToServer.deleteData(person._id).then((response) => {
+        setData(
+          data.filter((currentPerson) => currentPerson._id !== person._id)
+        );
       });
     }
   }
