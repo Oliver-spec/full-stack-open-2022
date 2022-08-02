@@ -30,14 +30,7 @@ export default function App() {
   }
 
   function addName(data) {
-    if (!newName || !newNumber) {
-      setNotificationState("Please enter a valid name or number!");
-      setTimeout(() => {
-        setNotificationState(null);
-      }, 5000);
-
-      return;
-    } else if (data.find((person) => person.name === newName)) {
+    if (data.find((person) => person.name === newName)) {
       const repeatedPerson = data.find((person) => person.name === newName);
       const id = repeatedPerson._id;
       const newPerson = {
@@ -47,15 +40,24 @@ export default function App() {
 
       talkToServer
         .putData(id, newPerson)
-        .then((res) => talkToServer.getData().then((res) => setData(res)));
+        .then((res) => talkToServer.getData().then((res) => setData(res)))
+        .catch((err) => setNotificationState(err.response.data.error));
+
+      setTimeout(() => {
+        setNotificationState(null);
+      }, 5000);
+
+      setNewName("");
+      setNewNumber("");
     } else {
       talkToServer
         .postData({ name: newName, number: newNumber })
         .then((response) => {
           setData(data.concat(response));
-        });
+          setNotificationState(`added ${newName}`);
+        })
+        .catch((err) => setNotificationState(err.response.data.error));
 
-      setNotificationState(`added ${newName}`);
       setTimeout(() => {
         setNotificationState(null);
       }, 5000);
@@ -78,11 +80,19 @@ export default function App() {
 
   function deleteEntry(person) {
     if (window.confirm(`Delete ${person.name}?`)) {
-      talkToServer.deleteData(person._id).then((response) => {
-        setData(
-          data.filter((currentPerson) => currentPerson._id !== person._id)
-        );
-      });
+      talkToServer
+        .deleteData(person._id)
+        .then((response) => {
+          setData(
+            data.filter((currentPerson) => currentPerson._id !== person._id)
+          );
+        })
+        .catch((err) => {
+          setNotificationState(err.response.data.error);
+          setTimeout(() => {
+            setNotificationState(null);
+          }, 5000);
+        });
     }
   }
 

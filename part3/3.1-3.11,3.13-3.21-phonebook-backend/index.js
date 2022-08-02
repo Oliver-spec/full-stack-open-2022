@@ -44,11 +44,11 @@ app.get("/info", (request, response, next) => {
 
 // post
 app.post("/api/persons", (request, response, next) => {
-  const body = request.body;
+  const { name, number } = request.body;
 
   new Person({
-    name: body.name,
-    number: body.number,
+    name,
+    number,
   })
     .save()
     .then((savedPerson) => response.json(savedPerson))
@@ -57,26 +57,37 @@ app.post("/api/persons", (request, response, next) => {
 
 // put
 app.put("/api/persons/:id", (req, res, next) => {
-  const id = req.params.id;
-  const body = req.body;
+  const { name, number } = req.body;
 
-  const newPerson = {
-    name: body.name,
-    number: body.number,
-  };
-
-  Person.findByIdAndUpdate(id, newPerson, { new: true })
+  Person.findByIdAndUpdate(
+    req.params.id,
+    { name, number },
+    { new: true, runValidators: true, context: query }
+  )
     .then((result) => res.json(result))
     .catch((err) => next(err));
 });
 
 // delete
 app.delete("/api/persons/:id", (request, response, next) => {
-  const id = request.params.id;
-  Person.findByIdAndDelete(id)
+  Person.findByIdAndDelete(request.params.id)
     .then((result) => response.status(204).end())
     .catch((err) => next(err));
 });
+
+// error handling middleware
+const errorHandler = (err, req, res, next) => {
+  console.error(err.message);
+
+  if (err.name === "CastError") {
+    res.status(400).json({ error: "Cannot find the specified person!" });
+  } else if (err.name === "ValidationError") {
+    res.status(400).json({ error: err.message });
+  } else {
+    next(err);
+  }
+};
+app.use(errorHandler);
 
 app.listen(process.env.PORT, () =>
   console.log(`listening on ${process.env.PORT}`)
