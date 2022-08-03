@@ -7,7 +7,15 @@ mongoose
   .catch((error) => console.log("Error connecting to MongoDB:", error.message));
 
 const personSchema = new mongoose.Schema({
-  name: { type: String, minLength: 3, required: true },
+  name: {
+    type: String,
+    minLength: 3,
+    validate: {
+      validator: (string) => !!string.replace(/\s/g, ""),
+      message: "Invalid Name!",
+    },
+    required: true,
+  },
   number: {
     type: String,
     minLength: 9,

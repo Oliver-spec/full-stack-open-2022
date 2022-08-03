@@ -45,13 +45,21 @@ app.get("/info", (request, response, next) => {
 // post
 app.post("/api/persons", (request, response, next) => {
   const { name, number } = request.body;
-
-  new Person({
-    name,
-    number,
-  })
-    .save()
-    .then((savedPerson) => response.json(savedPerson))
+  Person.find({ name })
+    .then((repeatedName) => {
+      // console.log(repeatedName);
+      if (repeatedName.length === 0) {
+        new Person({
+          name,
+          number,
+        })
+          .save()
+          .then((savedPerson) => response.json(savedPerson))
+          .catch((err) => next(err));
+      } else {
+        response.status(400).json({ error: "Error: Name already exists!" });
+      }
+    })
     .catch((err) => next(err));
 });
 
@@ -62,7 +70,7 @@ app.put("/api/persons/:id", (req, res, next) => {
   Person.findByIdAndUpdate(
     req.params.id,
     { name, number },
-    { new: true, runValidators: true, context: query }
+    { new: true, runValidators: true, context: "query" }
   )
     .then((result) => res.json(result))
     .catch((err) => next(err));
@@ -80,7 +88,7 @@ const errorHandler = (err, req, res, next) => {
   console.error(err.message);
 
   if (err.name === "CastError") {
-    res.status(400).json({ error: "Cannot find the specified person!" });
+    res.status(400).json({ error: "Error: Cannot find the specified person!" });
   } else if (err.name === "ValidationError") {
     res.status(400).json({ error: err.message });
   } else {

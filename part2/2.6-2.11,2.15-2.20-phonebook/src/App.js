@@ -105,7 +105,7 @@ export default function App() {
         newNumber={newNumber}
       />
       <Filter filterNames={filterNames} />
-      <h2>add a new</h2>
+      <h2>Add a New</h2>
       <form>
         <AddName changeNewName={changeNewName} newName={newName} />
         <AddNumber changeNewNumber={changeNewNumber} newNumber={newNumber} />

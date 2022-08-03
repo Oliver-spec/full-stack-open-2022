@@ -12,6 +12,7 @@ function postData(newObj) {
 function deleteData(id) {
   return axios.delete(`${baseURL}/${id}`).then((response) => response.data);
 }
+
 function putData(id, newObj) {
   return axios
     .put(`${baseURL}/${id}`, newObj)
