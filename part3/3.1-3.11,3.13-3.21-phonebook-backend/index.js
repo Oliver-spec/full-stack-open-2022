@@ -79,7 +79,7 @@ app.put("/api/persons/:id", (req, res, next) => {
 // delete
 app.delete("/api/persons/:id", (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then((result) => response.status(204).end())
+    .then(() => response.status(204).end())
     .catch((err) => next(err));
 });
 

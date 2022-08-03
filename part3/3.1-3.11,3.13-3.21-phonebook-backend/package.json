@@ -11,7 +11,10 @@
   "author": "oliver",
   "license": "MIT",
   "devDependencies": {
-    "nodemon": "^2.0.19"
+    "eslint": "^8.21.0",
+    "eslint-config-prettier": "^8.5.0",
+    "nodemon": "^2.0.19",
+    "prettier": "2.7.1"
   },
   "dependencies": {
     "cors": "^2.8.5",
