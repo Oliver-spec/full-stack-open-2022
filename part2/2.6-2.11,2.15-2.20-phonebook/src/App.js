@@ -54,7 +54,7 @@ export default function App() {
         .postData({ name: newName, number: newNumber })
         .then((response) => {
           setData(data.concat(response));
-          setNotificationState(`added ${newName}`);
+          setNotificationState(`Added ${newName}`);
         })
         .catch((err) => setNotificationState(err.response.data.error));
 

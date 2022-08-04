@@ -21,15 +21,9 @@ export default function Notification({ notificationState }) {
 
   if (notificationState === null) {
     return null;
-  } else if (notificationState.includes("Invalid")) {
-    return <div style={ErrorStyle}>Invalid Name or Phone Number</div>;
-  } else if (notificationState.startsWith("Error: Name already exists!")) {
-    return <div style={ErrorStyle}>{notificationState}</div>;
-  } else if (
-    notificationState.startsWith("Error: Cannot find the specified person!")
-  ) {
-    return <div style={ErrorStyle}>{notificationState}</div>;
-  } else {
+  } else if (notificationState.includes("Added")) {
     return <div style={NormalStyle}>{notificationState}</div>;
+  } else {
+    return <div style={ErrorStyle}>{notificationState}</div>;
   }
 }
