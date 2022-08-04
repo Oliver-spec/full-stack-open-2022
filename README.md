@@ -7,7 +7,7 @@
 |  Part 0  |    DONE    |
 |  Part 1  |    DONE    |
 |  Part 2  |    DONE    |
-|  Part 3  |            |
+|  Part 3  |    DONE    |
 |  Part 4  |            |
 |  Part 5  |            |
 |  Part 6  |            |
