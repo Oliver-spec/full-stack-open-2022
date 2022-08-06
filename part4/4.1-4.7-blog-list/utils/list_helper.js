@@ -48,4 +48,23 @@ const mostBlogs = (blogs) => {
   return { author, blogs: counter[author] };
 };
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) {
+    return {};
+  } else if (blogs.length === 1) {
+    return { author: blogs[0].author, likes: blogs[0].likes };
+  }
+
+  const counter = {};
+  blogs.forEach((blog) => {
+    blog.author in counter
+      ? (counter[blog.author] += blog.likes)
+      : (counter[blog.author] = blog.likes);
+  });
+  const author = Object.keys(counter).reduce((prev, curr) =>
+    counter[curr] > counter[prev] ? curr : prev
+  );
+  return { author, likes: counter[author] };
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes };
