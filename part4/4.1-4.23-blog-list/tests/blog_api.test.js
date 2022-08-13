@@ -2,75 +2,59 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../app");
 const Blog = require("../models/blog");
+const helper = require("./test_helper");
 
 const api = supertest(app);
 
 beforeEach(async () => {
   await Blog.deleteMany({});
-  await new Blog({
-    title: "test1",
-    author: "oliver",
-    url: "abc.com",
-    likes: 12,
-  }).save();
-  await new Blog({
-    title: "test2",
-    author: "terry",
-    url: "123.com",
-    likes: 0,
-  }).save();
+  const blogPromiseArray = helper.startingNotes.map((blog) =>
+    new Blog(blog).save()
+  );
+  await Promise.all(blogPromiseArray);
 });
 
-test("all blogs are properly returned", async () => {
-  const result = await api.get("/api/blogs");
-  expect(result.status).toBe(200);
-  expect(result.headers["content-type"]).toBe(
+test("the blog list application returns the correct amount of blog posts in the JSON format", async () => {
+  const response = await api.get("/api/blogs");
+
+  expect(response.headers["content-type"]).toBe(
     "application/json; charset=utf-8"
   );
-  expect(result.body.length).toBe(2);
-  expect(result.body[0].id).toBeDefined();
-  expect(result.body[1].id).toBeDefined();
+  expect(response.body).toHaveLength(helper.startingNotes.length);
 });
 
-test("blogs are properly created", async () => {
-  const newBlog = await api.post("/api/blogs").send({
-    title: "post a blog",
-    author: "someone",
-    url: "zzz.com",
-    likes: 10000,
+test("unique identifier property of the blog posts is named id", async () => {
+  const response = await api.get("/api/blogs");
+  response.body.forEach((blog) => {
+    expect(blog.id).toBeDefined();
   });
-  const allBlogs = await api.get("/api/blogs");
-  expect(allBlogs.body.length).toBe(3);
-  expect(allBlogs.body).toEqual([
-    {
-      title: "test1",
-      author: "oliver",
-      url: "abc.com",
-      likes: 12,
-      id: expect.any(String),
-    },
-    {
-      title: "test2",
-      author: "terry",
-      url: "123.com",
-      likes: 0,
-      id: expect.any(String),
-    },
-    {
-      title: "post a blog",
-      author: "someone",
-      url: "zzz.com",
-      likes: 10000,
-      id: expect.any(String),
-    },
-  ]);
-  expect(newBlog.body).toEqual({
-    title: "post a blog",
-    author: "someone",
-    url: "zzz.com",
-    likes: 10000,
-    id: expect.any(String),
-  });
+});
+
+test("HTTP POST request to the /api/blogs url successfully creates a new blog post", async () => {
+  await api.post("/api/blogs").send(helper.newBlog);
+  const newBlogWithId = helper.newBlog;
+  newBlogWithId.id = expect.any(String);
+  const getResponse = await api.get("/api/blogs");
+  helper.startingNotes
+    .map((blog) => (blog.id = expect.any(String)))
+    .concat(newBlogWithId);
+  expect(getResponse.body).toHaveLength(helper.startingNotes.length + 1);
+});
+
+test("if the likes property is missing from the request, it will default to the value 0", async () => {
+  const newBlog = helper.newBlog;
+  delete newBlog.likes;
+  await api.post("/api/blogs").send(newBlog);
+  const getResponse = await api.get("/api/blogs");
+  expect(getResponse.body[getResponse.body.length - 1].likes).toBe(0);
+});
+
+test("if the title and url properties are missing from the request data, the backend responds to the request with the status code 400", async () => {
+  const newBlog = helper.newBlog;
+  delete newBlog.title;
+  delete newBlog.url;
+  const postResponse = await api.post("/api/blogs").send(newBlog);
+  expect(postResponse.status).toBe(400);
 });
 
 afterAll(() => mongoose.connection.close);

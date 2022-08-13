@@ -9,10 +9,14 @@ const app = express();
 
 logger.info(`connecting to ${config.MONGODB_URL}`);
 
-mongoose
-  .connect(config.MONGODB_URL)
-  .then((result) => logger.info("connected to mongodb"))
-  .catch((err) => logger.error(err.message));
+(async () => {
+  try {
+    await mongoose.connect(config.MONGODB_URL);
+    logger.info("connected to mongodb");
+  } catch (exception) {
+    logger.error(exception);
+  }
+})();
 
 app.use(cors());
 app.use(express.static("build"));
