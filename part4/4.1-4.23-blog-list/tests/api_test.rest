@@ -4,3 +4,15 @@ Content-Type: application/json
 {"title": "Hello world!", "author": "oliver", "url": "https://blog.com", "likes": "10"}
 ###
 GET http://localhost:3003/api/blogs HTTP/1.1
+###
+PUT http://localhost:3003/api/blogs/62ed38fb69a75ac494d17d15 HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "updated",
+  "author": "updated",
+  "url": "updated.com",
+  "likes": 100
+}
+###
+DELETE http://localhost:3003/api/blogs/62ed38fb69a75ac494d17d15 HTTP/1.1

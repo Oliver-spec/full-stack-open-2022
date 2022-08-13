@@ -22,4 +22,22 @@ blogRouter.post("/", async (req, res, next) => {
   }
 });
 
+blogRouter.delete("/:id", async (req, res, next) => {
+  try {
+    await Blog.findByIdAndDelete(req.params.id);
+    res.status(200).end();
+  } catch (err) {
+    next(err);
+  }
+});
+
+blogRouter.put("/:id", async (req, res, next) => {
+  try {
+    await Blog.findByIdAndUpdate(req.params.id, req.body);
+    res.status(200).end();
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = blogRouter;
