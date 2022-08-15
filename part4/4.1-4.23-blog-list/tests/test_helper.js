@@ -20,4 +20,49 @@ const newBlog = {
   likes: 0,
 };
 
-module.exports = { startingNotes, newBlog };
+const repeatedUser = {
+  name: "repeated",
+  username: "I am repeated",
+  password: "valid",
+};
+
+const tooShortUsername = {
+  name: "Mr too short username",
+  username: "aa",
+  password: "12345",
+};
+
+const tooShortPassword = {
+  name: "Mr too short password",
+  username: "too short password",
+  password: "12",
+};
+
+const noUsernameAndPassword = {
+  name: "Nameless",
+  username: "",
+  password: "",
+};
+
+const noUsername = {
+  name: "Nameless",
+  username: "",
+  password: "12345",
+};
+
+const noPassword = {
+  name: "Nameless",
+  username: "username",
+  password: "",
+};
+
+module.exports = {
+  startingNotes,
+  newBlog,
+  repeatedUser,
+  tooShortPassword,
+  tooShortUsername,
+  noUsernameAndPassword,
+  noUsername,
+  noPassword,
+};
