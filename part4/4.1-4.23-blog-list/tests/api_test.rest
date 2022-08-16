@@ -1,17 +1,20 @@
 POST http://localhost:3003/api/blogs HTTP/1.1
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVJ9.eyJ1c2VybmFtZSI6IkxvZ2luIiwiaWQiOiI2MmZhNDYxNGRiYTMwMjA2OGM5OTQ2NzEiLCJpYXQiOjE2NjA2MzEzNjEsImV4cCI6MTY2MDYzNDk2MX0.z-EaQ5Lic95kq--C9Bxz41Gyr4MeRfyQLLJvj5q9V1o
 
 {
   "title": "Hello world!",
   "author": "buggggg",
-  "url": "https://blog.com",
-  "userId": "62f9125ac95f18c0452d8575"
+  "url": "https://blog.com"
 }
 ###
+// get all blogs
 GET http://localhost:3003/api/blogs HTTP/1.1
 ###
+// update a blog
 PUT http://localhost:3003/api/blogs/62ed38fb69a75ac494d17d15 HTTP/1.1
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkxvZ2luIiwiaWQiOiI2MmZhNDYxNGRiYTMwMjA2OGM5OTQ2NzEiLCJpYXQiOjE2NjA2Mjc4OTUsImV4cCI6MTY2MDYzMTQ5NX0.26PSHoc-Mmx0gTo_N_LEUxaOEbzWz1NrdHh8bpKKoWY
 
 {
   "title": "updated",
@@ -20,8 +23,11 @@ Content-Type: application/json
   "likes": 100
 }
 ###
-DELETE http://localhost:3003/api/blogs/62ed38fb69a75ac494d17d15 HTTP/1.1
+// delete a blog
+DELETE http://localhost:3003/api/blogs/62fb39baaf7406883d8c091f HTTP/1.1
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkxvZ2luIiwiaWQiOiI2MmZhNDYxNGRiYTMwMjA2OGM5OTQ2NzEiLCJpYXQiOjE2NjA2MzEzNjEsImV4cCI6MTY2MDYzNDk2MX0.z-EaQ5Lic95kq--C9Bxz41Gyr4MeRfyQLLJvj5q9V1o
 ###
+// create an user
 POST http://localhost:3003/api/users HTTP/1.1
 Content-Type: application/json
 
@@ -31,6 +37,7 @@ Content-Type: application/json
   "password": "12345"
 }
 ###
+// get all users
 GET http://localhost:3003/api/users HTTP/1.1
 ###
 // login
@@ -39,5 +46,5 @@ Content-Type: application/json
 
 {
   "username": "Login",
-  "password": "2345"
+  "password": "12345"
 }

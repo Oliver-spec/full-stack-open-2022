@@ -1,6 +1,5 @@
 const blogRouter = require("express").Router();
 const Blog = require("../models/blog");
-const User = require("../models/user");
 
 blogRouter.get("/", async (req, res, next) => {
   try {
@@ -15,10 +14,8 @@ blogRouter.post("/", async (req, res, next) => {
     if (!req.body.likes) {
       req.body.likes = 0;
     }
-
-    const { title, author, url, likes, userId } = req.body;
-
-    const user = await User.findById(userId);
+    const { title, author, url, likes } = req.body;
+    const user = req.user;
 
     const blog = new Blog({ title, author, url, likes, user: user._id });
     const savedBlog = await blog.save();
@@ -34,8 +31,15 @@ blogRouter.post("/", async (req, res, next) => {
 
 blogRouter.delete("/:id", async (req, res, next) => {
   try {
-    await Blog.findByIdAndDelete(req.params.id);
-    res.status(200).end();
+    const blogToDelete = await Blog.findById(req.params.id);
+    if (req.user._id.toString() === blogToDelete.user.toString()) {
+      await Blog.findByIdAndDelete(req.params.id);
+      res.status(200).end();
+    } else {
+      res
+        .status(401)
+        .json({ error: "you are not authorized to delete this blog" });
+    }
   } catch (err) {
     next(err);
   }
