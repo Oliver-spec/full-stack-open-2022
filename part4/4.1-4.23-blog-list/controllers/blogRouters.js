@@ -1,5 +1,6 @@
 const blogRouter = require("express").Router();
 const Blog = require("../models/blog");
+const { userExtractor, tokenExtractor } = require("../utils/middleware");
 
 blogRouter.get("/", async (req, res, next) => {
   try {
@@ -9,7 +10,7 @@ blogRouter.get("/", async (req, res, next) => {
   }
 });
 
-blogRouter.post("/", async (req, res, next) => {
+blogRouter.post("/", tokenExtractor, userExtractor, async (req, res, next) => {
   try {
     if (!req.body.likes) {
       req.body.likes = 0;
@@ -29,21 +30,26 @@ blogRouter.post("/", async (req, res, next) => {
   }
 });
 
-blogRouter.delete("/:id", async (req, res, next) => {
-  try {
-    const blogToDelete = await Blog.findById(req.params.id);
-    if (req.user._id.toString() === blogToDelete.user.toString()) {
-      await Blog.findByIdAndDelete(req.params.id);
-      res.status(200).end();
-    } else {
-      res
-        .status(401)
-        .json({ error: "you are not authorized to delete this blog" });
+blogRouter.delete(
+  "/:id",
+  tokenExtractor,
+  userExtractor,
+  async (req, res, next) => {
+    try {
+      const blogToDelete = await Blog.findById(req.params.id);
+      if (req.user._id.toString() === blogToDelete.user.toString()) {
+        await Blog.findByIdAndDelete(req.params.id);
+        res.status(200).end();
+      } else {
+        res
+          .status(401)
+          .json({ error: "you are not authorized to delete this blog" });
+      }
+    } catch (err) {
+      next(err);
     }
-  } catch (err) {
-    next(err);
   }
-});
+);
 
 blogRouter.put("/:id", async (req, res, next) => {
   try {

@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs HTTP/1.1
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVJ9.eyJ1c2VybmFtZSI6IkxvZ2luIiwiaWQiOiI2MmZhNDYxNGRiYTMwMjA2OGM5OTQ2NzEiLCJpYXQiOjE2NjA2MzEzNjEsImV4cCI6MTY2MDYzNDk2MX0.z-EaQ5Lic95kq--C9Bxz41Gyr4MeRfyQLLJvj5q9V1o
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkxvZ2luIiwiaWQiOiI2MmZhNDYxNGRiYTMwMjA2OGM5OTQ2NzEiLCJpYXQiOjE2NjA2NDE2ODUsImV4cCI6MTY2MDY0NTI4NX0.RVQYtNkvegsSHpsfIOJinv-3cI8VYIbFeCabbsJ5jKs
 
 {
   "title": "Hello world!",
@@ -24,17 +24,17 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkxvZ
 }
 ###
 // delete a blog
-DELETE http://localhost:3003/api/blogs/62fb39baaf7406883d8c091f HTTP/1.1
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkxvZ2luIiwiaWQiOiI2MmZhNDYxNGRiYTMwMjA2OGM5OTQ2NzEiLCJpYXQiOjE2NjA2MzEzNjEsImV4cCI6MTY2MDYzNDk2MX0.z-EaQ5Lic95kq--C9Bxz41Gyr4MeRfyQLLJvj5q9V1o
+DELETE http://localhost:3003/api/blogs/62fb61c7b6e12021384e4d42 HTTP/1.1
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkxvZ2luIiwiaWQiOiI2MmZhNDYxNGRiYTMwMjA2OGM5OTQ2NzEiLCJpYXQiOjE2NjA2NDE2ODUsImV4cCI6MTY2MDY0NTI4NX0.RVQYtNkvegsSHpsfIOJinv-3cI8VYIbFeCabbsJ5jKs
 ###
 // create an user
 POST http://localhost:3003/api/users HTTP/1.1
 Content-Type: application/json
 
 {
-  "username": "Login",
-  "name": "testing",
-  "password": "12345"
+  "username": "for_testing",
+  "name": "mr testing",
+  "password": "testing"
 }
 ###
 // get all users
@@ -45,6 +45,6 @@ POST http://localhost:3003/api/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "username": "Login",
-  "password": "12345"
+  "username": "for_testing",
+  "password": "testing"
 }
